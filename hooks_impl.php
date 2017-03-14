@@ -25,14 +25,14 @@ function reseval_save_record($project_id, $record, $instrument, $event_id,
     //error_log($CONFIG['resident_info_pid']);
     // This differs from REDCap's Record class in that project records can be
     // queried for by fields other than record id.
-   require_once(dirname(__FILE__).'/utils/records.php');
+   require_once(dirname(__FILE__).'/../utils/records.php');
 
    // Evaluates REDCap branching logic syntax.
     require_once(APP_PATH_DOCROOT.'Classes/LogicTester.php');
     // Provides properly formated REDCap record data for use with LogicTester.
     require_once(APP_PATH_DOCROOT.'Classes/Records.php');
     
-    $survey_instruments = array($CONFIG['res_eval_link'] => $CONFIG['fac_evaluation_of_resident'],$CONFIG['fac_eval_link'] => $CONFIG['res_evaluation_of_faculty']);
+    $survey_instruments = array($CONFIG['res_eval_link'] => $CONFIG['res_eval_by_fac'],$CONFIG['fac_eval_link'] => $CONFIG['fac_eval_by_res']);
     
    // $resident_insts = array('resident_kumc','resident_amc','resident_slu','resident_evms','resident_wu','resident_uwm');    
     //$res_email_label = "resident_email";
