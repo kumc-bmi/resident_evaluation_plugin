@@ -1,9 +1,14 @@
 <?php
 /**
- * This is an implementation of the redcap_save_record hook which sends
- * preconfigured email notifications when an associated REDCap record is save,
- * and trigger conditions are meet.
+ * This is an implementation of the reseval_save_record hook which have four basic functions.
+ * 1. To generate survey links for resident and faculty
+ * 2. To fetch the resident and faculty emails from their info projects based on the selection from dropdown of resident_evaluation first survey
+ * 3. To load these emails and generated survey links into invite information instrument of resident_evaluation.
+ * 4. Assigns DAG to the record based on the institution.
+ * Then the notifications hook is invoked and send emails based on the invite information.
+ * To support cron job, time and date are also captured here and is loaded into invite_information.
  */
+
 define('RC_YES', 1);
 define('RC_NO', 0);
 define('RC_FORM_COMPLETE', 2);
@@ -15,27 +20,18 @@ function reseval_save_record($project_id, $record, $instrument, $event_id,
 
 
     global $conn; // REDCapism
-    require_once(REDCAP_ROOT.'redcap_connect.php');
 
-    // Load configuration plugin configuration.
+    require_once(REDCAP_ROOT.'redcap_connect.php');
+   
     define('FRAMEWORK_ROOT', REDCAP_ROOT.'plugins/framework/');
     define('RESIDENT_EVAL_ROOT', REDCAP_ROOT.'plugins/reseval/');
-    //error_log('test 1');
+
     require_once(FRAMEWORK_ROOT.'PluginConfig.php');
-    
-    //error_log('test 2');
     require_once(FRAMEWORK_ROOT.'ProjectModel.php');
-    //require_once(FRAMEWORK_ROOT.'RestCallRequest.php');
-    //error_log('test 3');
+
 
     $CONFIG = new PluginConfig(RESIDENT_EVAL_ROOT.'reseval.ini');
-  // Evaluates REDCap branching logic syntax.
-    require_once(APP_PATH_DOCROOT.'Classes/LogicTester.php');
-    // Provides properly formated REDCap record data for use with LogicTester.
-    require_once(APP_PATH_DOCROOT.'Classes/Records.php');
-
-
-
+    
     $resident_eval =  new ProjectModel($project_id, $conn);
     $resident_info = new ProjectModel($CONFIG['resident_info_pid'], $conn);
     $faculty_info =  new ProjectModel($CONFIG['faculty_info_pid'], $conn);
