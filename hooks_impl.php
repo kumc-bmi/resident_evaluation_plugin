@@ -9,87 +9,51 @@ define('RC_NO', 0);
 define('RC_FORM_COMPLETE', 2);
 
 
-function shutDownFunction(){
-	$error = error_get_last();
-        error_log(print_r($error,true));
-
-}
-
-
 function reseval_save_record($project_id, $record, $instrument, $event_id,
                                    $group_id, $survey_hash, $response_id)
 {
-    // Provides access to REDCap helper functions and database connection.
-    //print "hello";
-    register_shutdown_function('shutDownFunction');
-    error_log("**********************************ENTERED RESEVAL_SAVE FUNCTION*****************************");
+
+
     global $conn; // REDCapism
     require_once(REDCAP_ROOT.'redcap_connect.php');
 
     // Load configuration plugin configuration.
-   define('FRAMEWORK_ROOT', REDCAP_ROOT.'plugins/framework/');
-   define('RESIDENT_EVAL_ROOT', REDCAP_ROOT.'plugins/reseval/');
-    error_log('test 1');
+    define('FRAMEWORK_ROOT', REDCAP_ROOT.'plugins/framework/');
+    define('RESIDENT_EVAL_ROOT', REDCAP_ROOT.'plugins/reseval/');
+    //error_log('test 1');
     require_once(FRAMEWORK_ROOT.'PluginConfig.php');
     
-    error_log('test 2');
+    //error_log('test 2');
     require_once(FRAMEWORK_ROOT.'ProjectModel.php');
     //require_once(FRAMEWORK_ROOT.'RestCallRequest.php');
-    error_log('test 3');
+    //error_log('test 3');
 
     $CONFIG = new PluginConfig(RESIDENT_EVAL_ROOT.'reseval.ini');
-    //error_log("inside config");
-    //error_log($CONFIG['resident_info_pid']);
-    // This differs from REDCap's Record class in that project records can be
-    // queried for by fields other than record id.
-    // require_once(dirname(__FILE__).'/../utils/records.php');
-
-   // Evaluates REDCap branching logic syntax.
+  // Evaluates REDCap branching logic syntax.
     require_once(APP_PATH_DOCROOT.'Classes/LogicTester.php');
     // Provides properly formated REDCap record data for use with LogicTester.
     require_once(APP_PATH_DOCROOT.'Classes/Records.php');
 
-     error_log('test 4');
+
 
     $resident_eval =  new ProjectModel($project_id, $conn);
-
     $resident_info = new ProjectModel($CONFIG['resident_info_pid'], $conn);
-
     $faculty_info =  new ProjectModel($CONFIG['faculty_info_pid'], $conn);
 
-    error_log("this is the new residents object");
 
-    $resident_eval->make_writeable($CONFIG['api_url'],$CONFIG['proj_token']);
+
+    $resident_eval->make_writeable($CONFIG['api_url'],$CONFIG['proj_token']); 
+
    
-//    error_log(print_r($residents, true));
-    
     $survey_instruments = array($CONFIG['res_eval_link'] => $CONFIG['res_eval_by_fac'],$CONFIG['fac_eval_link'] => $CONFIG['fac_eval_by_res']);
-    
-   // $resident_insts = array('resident_kumc','resident_amc','resident_slu','resident_evms','resident_wu','resident_uwm');    
-    //$res_email_label = "resident_email";
-    //$res_info_proj_num = '181';
-    //$res_info_email_field = 'email';
-
-   // $eval_insts = array('evaluator_kumc','evaluator_amc','evaluator_slu','evaluator_evms','evaluator_wu','evaluator_uwm');
-    //$eval_email_label = 'faculty_email';
-    //$eval_info_proj_num = '182';
-    //$eval_info_email_field = 'email'; 
-
-    
-    error_log("the survey_instruments obj has");
-    error_log(print_r($survey_instruments, TRUE));
-
-
+    $record_data = $resident_eval->get_record_by('record',$record);   
+ 
     foreach ($survey_instruments as $survey_field => $survey_name){
 	
 		$s_link =  REDCap::getSurveyLink($record,$survey_name);
-		
 		if(empty($s_link)){
-		
 			error_log('Failed in generating the survey link for '.$survey_name);
-
 		}
-				
 		$result_save_link = save_value_in_record(
                                                          $resident_eval,
 				    	                 $record,
@@ -97,32 +61,24 @@ function reseval_save_record($project_id, $record, $instrument, $event_id,
                                    			 $survey_field);
 
        		if($result_save_link == false){
-
-        		error_log('Failed in saving the survey link in invite information in'.$survey_filed);
-       
-       		}	
+	       		error_log('Failed in saving the survey link in invite information in'.$survey_filed);
+      		}	
 
     }
   
-  
-    //$record_data = Records::getData('array', $record);
-   $record_data = $resident_eval->get_record_by('record',$record);
-   //$record_data_formatted = array($record => array($event_id => $record_data)); 
 
-   // $record_data[$record][$event_id]['institution']
-  
-    $result_save_DAG = save_DAG_for_record( $project_id, 
-					    $event_id, 
-					    $record, 
-					    $record_data);   
- 
-    //$record_data = Records::getData('array', $record);
-    
-   // $res_data = $resident_info->get_record_by('record',$rec_num);
-
-  
-    error_log ("************Using Project models*****************************************");                   
-    $result_res_email = get_and_save_emails(
+    $result_save_DAG  =  save_DAG_for_record( 
+					 $project_id, 
+					 $event_id, 
+					 $record, 
+					 $record_data
+					);
+    if( $result_save_DAG == false){
+			error_log('Failed in saving the DAG information of record'.$record);
+    }	
+   
+                  
+    $result_res_email =  get_and_save_emails(
                                          $resident_eval,
                                          $record,
 		  			 $record_data,
@@ -134,11 +90,10 @@ function reseval_save_record($project_id, $record, $instrument, $event_id,
 
    
     if($result_res_email == false){
-
-    	error_log('Failed in saving the resident email in invite information');
+    			error_log('Failed in saving the resident email in invite information');
     }
 
-   $result_eval_email =  get_and_save_emails(
+    $result_eval_email =  get_and_save_emails(
                                          $resident_eval,
 					 $record,
                    		         $record_data,
@@ -150,64 +105,54 @@ function reseval_save_record($project_id, $record, $instrument, $event_id,
 
 
      if($result_eval_email == false){
-
-        error_log('Failed in saving the faculty email in invite information');
+    			error_log('Failed in saving the faculty email in invite information');
     }
 
     
     $current_time = date("H:i:s");
-    $result_save_time = save_value_in_record( $resident_eval,
-					      $record,
-					      $current_time,
-					      $CONFIG['submit_time']);
+    $result_save_time = save_value_in_record( 
+					$resident_eval,
+					$record,
+					$current_time,
+					$CONFIG['submit_time']
+					);
 
     $current_date = date("m/d/Y");
-    $result_save_date = save_value_in_record( $resident_eval,
-                                              $record,
-                                              $current_date,
-                                              $CONFIG['submit_date']);
+    $result_save_date = save_value_in_record( 
+					$resident_eval,
+                                        $record,
+                                        $current_date,
+                                        $CONFIG['submit_date']
+					);
 
     
-
-    error_log("reached the end of the program bye bye");
+   register_shutdown_function('shutDownFunction');
+ 
     return true;
 
 }
 
 // function that is specific to Resident evaluation project that gets the email addresses and saves in other instrument 
-function get_and_save_emails($resident_eval,$record,$record_data,$institutions,$invite_email_label,$info_project,$info_email_field){
+function get_and_save_emails($resident_eval, $record, $record_data, $institutions, $invite_email_label, $info_project, $info_email_field){
  
   $get_inst_value = array();
  
   foreach ($institutions as $inst){
-  	
 	array_push($get_inst_value, $record_data[$inst]);
-
    }     
 
    $rec_num = max($get_inst_value);
-
-//   $rec_data =  get_record_data($rec_num, $proj_num, $conn);
-     
-
-   error_log("am i reaching here");
-
    $rec_data = $info_project->get_record_by('record',$rec_num);
  
-//** By using the ProjectModel, there is no method in it that takes in the record number, project number and returns the record_data. All the functions in the framework are restricted to the current project.
+   $result_save_emails =  save_value_in_record(
+					$resident_eval,
+                                        $record,
+				  	$rec_data[$info_email_field],
+                        	        $invite_email_label
+					);
 
-
-   error_log(print_r ($rec_data , true)); 
-   $result_save_emails =  save_value_in_record($resident_eval,
-                                               $record,
-				  	       $rec_data[$info_email_field],
-                        	               $invite_email_label);
    if($result_save_emails == false){
- 
- 	error_log('Failed in saving the emails in invite information');
-        return false;  
-
-
+	       return false;  
    }
 
    return true;
@@ -218,38 +163,33 @@ function get_and_save_emails($resident_eval,$record,$record_data,$institutions,$
 
 function save_value_in_record($project_info,$record,$rec_value,$rec_field){
 
-
-	$record_data_to_save = array($rec_field => $rec_value);
-
-	$result_save_data_api = $project_info->save_record($record_data_to_save, $record);
-
-	return true;
+  $record_data_to_save = array($rec_field => $rec_value);
+  $result_save_data_api = $project_info->save_record($record_data_to_save, $record);
+  return true;
 
 }
 
-function save_DAG_for_record( $project_id, $event_id, $record, $record_data)
-{
+function save_DAG_for_record( $project_id, $event_id, $record, $record_data){
 
-	$DAG_name  = $record_data['institution'];
-   
-	$record_data_formatted = array($record => array($event_id => $record_data));
-   
-	$response = REDCap::saveData($project_id,'array',$record_data_formatted,'normal','MDY','eav',$DAG_name);
 
-        if($response['errors']== null){
- 
-		return true;
-        }   
+  $DAG_name  = $record_data['institution'];
+  $record_data_formatted = array($record => array($event_id => $record_data));
 
-	else{
+  $response = REDCap::saveData($project_id,'array',$record_data_formatted,'normal','MDY','eav',$DAG_name);
+        
+  if($response['errors'] !== null){
 
-		error_log("Have failed in saving the DAG information");
-	}
+		return false;
+  }      
+  
+  return true;
 
 } 
+function shutDownFunction(){
+        $error = error_get_last();
+        error_log(print_r($error,true));
 
-
-
+}
 
 
 
