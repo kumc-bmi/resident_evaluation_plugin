@@ -27,20 +27,22 @@ function reseval_save_record($project_id, $record, $instrument, $event_id,
     require_once(REDCAP_ROOT.'redcap_connect.php');
 
     // Load configuration plugin configuration.
-    define('FRAMEWORK_ROOT', REDCAP_ROOT.'plugins/framework/');
+   define('FRAMEWORK_ROOT', REDCAP_ROOT.'plugins/framework/');
+   define('RESIDENT_EVAL_ROOT', REDCAP_ROOT.'plugins/reseval/');
     error_log('test 1');
     require_once(FRAMEWORK_ROOT.'PluginConfig.php');
     
     error_log('test 2');
     require_once(FRAMEWORK_ROOT.'ProjectModel.php');
+    //require_once(FRAMEWORK_ROOT.'RestCallRequest.php');
     error_log('test 3');
 
-    $CONFIG = new PluginConfig(dirname(__FILE__).'/reseval.ini');
+    $CONFIG = new PluginConfig(RESIDENT_EVAL_ROOT.'reseval.ini');
     //error_log("inside config");
     //error_log($CONFIG['resident_info_pid']);
     // This differs from REDCap's Record class in that project records can be
     // queried for by fields other than record id.
-     require_once(dirname(__FILE__).'/../utils/records.php');
+    // require_once(dirname(__FILE__).'/../utils/records.php');
 
    // Evaluates REDCap branching logic syntax.
     require_once(APP_PATH_DOCROOT.'Classes/LogicTester.php');
@@ -56,8 +58,10 @@ function reseval_save_record($project_id, $record, $instrument, $event_id,
     $faculty_info =  new ProjectModel($CONFIG['faculty_info_pid'], $conn);
 
     error_log("this is the new residents object");
+
+    $resident_eval->make_writeable($CONFIG['api_url'],$CONFIG['proj_token']);
    
-    error_log(print_r($residents, true));
+//    error_log(print_r($residents, true));
     
     $survey_instruments = array($CONFIG['res_eval_link'] => $CONFIG['res_eval_by_fac'],$CONFIG['fac_eval_link'] => $CONFIG['fac_eval_by_res']);
     
@@ -87,9 +91,9 @@ function reseval_save_record($project_id, $record, $instrument, $event_id,
 		}
 				
 		$result_save_link = save_value_in_record(
+                                                         $resident_eval,
 				    	                 $record,
-                  		        	         $CONFIG,
-                                	    		 $s_link,
+                  		        	         $s_link,
                                    			 $survey_field);
 
        		if($result_save_link == false){
@@ -111,7 +115,7 @@ function reseval_save_record($project_id, $record, $instrument, $event_id,
 					    $event_id, 
 					    $record, 
 					    $record_data);   
-  
+ 
     //$record_data = Records::getData('array', $record);
     
    // $res_data = $resident_info->get_record_by('record',$rec_num);
@@ -119,15 +123,14 @@ function reseval_save_record($project_id, $record, $instrument, $event_id,
   
     error_log ("************Using Project models*****************************************");                   
     $result_res_email = get_and_save_emails(
+                                         $resident_eval,
                                          $record,
-		  			 $CONFIG,
 		  			 $record_data,
                    			 $CONFIG['resident_insts'],
                   			 $CONFIG['res_email_label'],
                   			 $resident_info,
-                  			 $CONFIG['res_info_email_field'],
-		  			 $event_id, 
-		  			 $conn);
+                  			 $CONFIG['res_info_email_field']
+		  			 );
 
    
     if($result_res_email == false){
@@ -136,15 +139,14 @@ function reseval_save_record($project_id, $record, $instrument, $event_id,
     }
 
    $result_eval_email =  get_and_save_emails(
+                                         $resident_eval,
 					 $record,
-                   		         $CONFIG,
-                  			 $record_data,
+                   		         $record_data,
                 	  		 $CONFIG['faculty_insts'],
                   			 $CONFIG['fac_email_label'],
                   			 $faculty_info,
-                  			 $CONFIG['fac_info_email_field'],
-                  			 $event_id,
-                  			 $conn);
+                  			 $CONFIG['fac_info_email_field']
+                  			 );
 
 
      if($result_eval_email == false){
@@ -154,14 +156,14 @@ function reseval_save_record($project_id, $record, $instrument, $event_id,
 
     
     $current_time = date("H:i:s");
-    $result_save_time = save_value_in_record( $record,
-					      $CONFIG,
+    $result_save_time = save_value_in_record( $resident_eval,
+					      $record,
 					      $current_time,
 					      $CONFIG['submit_time']);
 
     $current_date = date("m/d/Y");
-    $result_save_date = save_value_in_record( $record,
-                                              $CONFIG,
+    $result_save_date = save_value_in_record( $resident_eval,
+                                              $record,
                                               $current_date,
                                               $CONFIG['submit_date']);
 
@@ -173,7 +175,7 @@ function reseval_save_record($project_id, $record, $instrument, $event_id,
 }
 
 // function that is specific to Resident evaluation project that gets the email addresses and saves in other instrument 
-function get_and_save_emails($record, $CONFIG, $record_data,$institutions,$invite_email_label,$info_project,$info_email_field,$event_id, $conn){
+function get_and_save_emails($resident_eval,$record,$record_data,$institutions,$invite_email_label,$info_project,$info_email_field){
  
   $get_inst_value = array();
  
@@ -196,8 +198,8 @@ function get_and_save_emails($record, $CONFIG, $record_data,$institutions,$invit
 
 
    error_log(print_r ($rec_data , true)); 
-   $result_save_emails =  save_value_in_record($record,
-         			               $CONFIG,
+   $result_save_emails =  save_value_in_record($resident_eval,
+                                               $record,
 				  	       $rec_data[$info_email_field],
                         	               $invite_email_label);
    if($result_save_emails == false){
@@ -214,54 +216,37 @@ function get_and_save_emails($record, $CONFIG, $record_data,$institutions,$invit
 }
 // function to save the generated link in the record field.
 
-function save_value_in_record($record,$CONFIG,$rec_value,$rec_field){
+function save_value_in_record($project_info,$record,$rec_value,$rec_field){
 
 
-//require_once(REDCAP_ROOT.'redcap_connect.php');
+	$record_data_to_save = array($rec_field => $rec_value);
 
-  error_log("inside save value function");
-  error_log($CONFIG['proj_token']);
-  error_log($rec_value);
-  error_log($rec_field);
-  error_log($CONFIG['api_url']);
+	$result_save_data_api = $project_info->save_record($record_data_to_save, $record);
 
-
-   $field_val = array(array(
-        'record' => $record,
-        'field_name' => $rec_field,
-        'value' => $rec_value
-    ));
-
-
-//   $response = REDCap::saveData(180,'json',json_encode($field_val),'normal','MDY','eav','amc');
-//   error_log (print_r($response, true));
-
-    list($success, $error_msg) = save_redcap_data(
-        $CONFIG['api_url'],
-        $CONFIG['proj_token'],
-        $field_val
-    );
-    
-    if(!$success) {
-        error_log('Failed in saving the value to the record field: '.$error_msg);
-        return false;
-    }
-
-    return true;
-
+	return true;
 
 }
 
 function save_DAG_for_record( $project_id, $event_id, $record, $record_data)
 {
 
-   $DAG_name  = $record_data['institution'];
-   $record_data_formatted = array($record => array($event_id => $record_data));
-   $response = REDCap::saveData($project_id,'array',$record_data_formatted,'normal','MDY','eav',$DAG_name);
-   error_log (print_r($response, true));
+	$DAG_name  = $record_data['institution'];
+   
+	$record_data_formatted = array($record => array($event_id => $record_data));
+   
+	$response = REDCap::saveData($project_id,'array',$record_data_formatted,'normal','MDY','eav',$DAG_name);
 
+        if($response['errors']== null){
+ 
+		return true;
+        }   
 
-}
+	else{
+
+		error_log("Have failed in saving the DAG information");
+	}
+
+} 
 
 
 
