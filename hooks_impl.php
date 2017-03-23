@@ -49,7 +49,11 @@ function reseval_save_record($project_id, $record, $instrument, $event_id,
 
      error_log('test 4');
 
-    $residents =  new ProjectModel($project_id, $conn);
+    $resident_eval =  new ProjectModel($project_id, $conn);
+
+    $resident_info = new ProjectModel($CONFIG['resident_info_pid'], $conn);
+
+    $faculty_info =  new ProjectModel($CONFIG['faculty_info_pid'], $conn);
 
     error_log("this is the new residents object");
    
@@ -97,39 +101,47 @@ function reseval_save_record($project_id, $record, $instrument, $event_id,
     }
   
   
-    $record_data = Records::getData('array', $record);
+    //$record_data = Records::getData('array', $record);
+   $record_data = $resident_eval->get_record_by('record',$record);
+   //$record_data_formatted = array($record => array($event_id => $record_data)); 
+
+   // $record_data[$record][$event_id]['institution']
   
-    $result_save_DAG = save_DAG_for_record( $project_id,
-					    $record_data,
-                                            $record_data[$record][$event_id]['institution']);   
+    $result_save_DAG = save_DAG_for_record( $project_id, 
+					    $event_id, 
+					    $record, 
+					    $record_data);   
   
     //$record_data = Records::getData('array', $record);
+    
+   // $res_data = $resident_info->get_record_by('record',$rec_num);
 
-                   
+  
+    error_log ("************Using Project models*****************************************");                   
     $result_res_email = get_and_save_emails(
-                                         $residents,
-		  			 $record,
+                                         $record,
 		  			 $CONFIG,
 		  			 $record_data,
                    			 $CONFIG['resident_insts'],
                   			 $CONFIG['res_email_label'],
-                  			 $CONFIG['resident_info_pid'],
+                  			 $resident_info,
                   			 $CONFIG['res_info_email_field'],
 		  			 $event_id, 
 		  			 $conn);
+
+   
     if($result_res_email == false){
 
     	error_log('Failed in saving the resident email in invite information');
     }
 
    $result_eval_email =  get_and_save_emails(
-					 $residents,
-                  			 $record,
+					 $record,
                    		         $CONFIG,
                   			 $record_data,
                 	  		 $CONFIG['faculty_insts'],
                   			 $CONFIG['fac_email_label'],
-                  			 $CONFIG['faculty_info_pid'],
+                  			 $faculty_info,
                   			 $CONFIG['fac_info_email_field'],
                   			 $event_id,
                   			 $conn);
@@ -153,7 +165,7 @@ function reseval_save_record($project_id, $record, $instrument, $event_id,
                                               $current_date,
                                               $CONFIG['submit_date']);
 
-
+    
 
     error_log("reached the end of the program bye bye");
     return true;
@@ -161,24 +173,24 @@ function reseval_save_record($project_id, $record, $instrument, $event_id,
 }
 
 // function that is specific to Resident evaluation project that gets the email addresses and saves in other instrument 
-function get_and_save_emails($residents,$record, $CONFIG, $record_data,$institutions,$invite_email_label,$proj_num,$info_email_field,$event_id, $conn){
+function get_and_save_emails($record, $CONFIG, $record_data,$institutions,$invite_email_label,$info_project,$info_email_field,$event_id, $conn){
  
   $get_inst_value = array();
  
   foreach ($institutions as $inst){
   	
-	array_push($get_inst_value, $record_data[$record][$event_id][$inst]);
+	array_push($get_inst_value, $record_data[$inst]);
 
    }     
 
    $rec_num = max($get_inst_value);
 
-   $rec_data =  get_record_data($rec_num, $proj_num, $conn);
+//   $rec_data =  get_record_data($rec_num, $proj_num, $conn);
      
 
    error_log("am i reaching here");
 
-//   $rec_data = $residents->get_record_by('record',$rec_num);
+   $rec_data = $info_project->get_record_by('record',$rec_num);
  
 //** By using the ProjectModel, there is no method in it that takes in the record number, project number and returns the record_data. All the functions in the framework are restricted to the current project.
 
@@ -240,10 +252,12 @@ function save_value_in_record($record,$CONFIG,$rec_value,$rec_field){
 
 }
 
-function save_DAG_for_record( $project_id,$record_data,$DAG_name)
+function save_DAG_for_record( $project_id, $event_id, $record, $record_data)
 {
 
-   $response = REDCap::saveData($project_id,'array',$record_data,'normal','MDY','eav',$DAG_name);
+   $DAG_name  = $record_data['institution'];
+   $record_data_formatted = array($record => array($event_id => $record_data));
+   $response = REDCap::saveData($project_id,'array',$record_data_formatted,'normal','MDY','eav',$DAG_name);
    error_log (print_r($response, true));
 
 
