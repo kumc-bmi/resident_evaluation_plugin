@@ -1,12 +1,17 @@
 <?php
 /**
- * This is an implementation of the reseval_save_record hook which have four basic functions.
+ * This is an implementation of the reseval_save_record hook 
+ * This has four basic functions.
  * 1. To generate survey links for resident and faculty
- * 2. To fetch the resident and faculty emails from their info projects based on the selection from dropdown of resident_evaluation first survey
- * 3. To load these emails and generated survey links into invite information instrument of resident_evaluation.
+ * 2. To fetch the resident and faculty emails from their info projects 
+ *    based on the selection from dropdown of resident_evaluation first survey
+ * 3. To load these emails and generated survey links into 
+ *    invite information instrument of resident_evaluation.
  * 4. Assigns DAG to the record based on the institution.
- * Then the notifications hook is invoked and send emails based on the invite information.
- * To support cron job, time and date are also captured here and is loaded into invite_information.
+ * Then the notifications hook is invoked and send emails 
+ * based on the invite information.
+ * To support cron job, time and date are also captured here and 
+ * is loaded into invite_information.
  */
 
 define('RC_YES', 1);
@@ -160,7 +165,9 @@ function reseval_save_record($project_id, $record, $instrument, $event_id,
 
 }
 
-// function that is specific to Resident evaluation project that gets the email addresses and saves in other instrument 
+// function that is specific to Resident evaluation project 
+// that gets the email addresses and saves in other instrument 
+
 function get_and_save_emails($resident_eval, $record, $record_data, 
                              $institutions, $invite_email_label, 
                              $info_project, $info_email_field)
