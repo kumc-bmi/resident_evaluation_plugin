@@ -1,5 +1,7 @@
+# Heading 1 #
 REDCap Resident Evaluation Plugin
 
+## Heading 2 ##
 INTRODUCTION
 
 This plugin is developed to meet the requirements of a Project - Resident Evalution. 
@@ -12,6 +14,7 @@ It has four basic functions.
     
 This execution is followed by the notifications hook which send out the survey links as email notifications.
 
+## Heading 2 ##
 REQUIREMENTS
 
 This code requires that the REDCap Hook Registry code be installed. The hook registry was developed along side this notification plugin. More information about the REDCap Hook Registry can be found at https://github.com/kumc-bmi/redcap-hook-registry.
@@ -22,6 +25,7 @@ PluginConfig.php: This contains a class definition for an immutable object, whic
 
 RestCallRequest.php: This code was written by REDCap developer for use with their API, and distributed on the REDCap Consortium site (http://project-redcap.org).
 
+## Heading 2 ##
 INSTALLATION
 
 To install this code:
@@ -30,12 +34,14 @@ Clone the Resident Evaluation plugin code into <redcap-root>/plugins/reseval.
 
 Create a new REDCap project for Resident Evaluation, and upload the data_dictionary.csv file in this directory.
 
+## Heading 2 ##
 CONFIGURATION
 
 The Resident Evaluation plugin configuration can be found in reseval.ini
 
 A sample reseval.ini is attached to the Resident Evaluation repository in github.
 
+## Heading 2 ##
 MAINTAINERS
 
 Current maintainers:
