@@ -1,0 +1,7 @@
+"Variable / Field Name","Form Name","Section Header","Field Type","Field Label","Choices, Calculations, OR Slider Labels","Field Note","Text Validation Type OR Show Slider Number","Text Validation Min","Text Validation Max",Identifier?,"Branching Logic (Show field only if...)","Required Field?","Custom Alignment","Question Number (surveys only)","Matrix Group Name","Matrix Ranking?","Field Annotation"
+resident_id,resident_information,,text,"Resident ID",,,,,,,,,,,,,
+first_name,resident_information,,text,"First Name",,,,,,y,,y,,,,,
+last_name,resident_information,,text,"Last Name",,,,,,,,y,,,,,
+email,resident_information,,text,"Email Address",,,email,,,,,y,,,,,
+res_institution,resident_information,,dropdown,Institution,"kumc, University of Kansas Medical Center | amc, Albany Medical Center | slu, Southern Illinois University | evms, Eastern Virginia Medical School | wu, Washington University | uwm, University of Wisconsin, Madison",,autocomplete,,,,,y,,,,,
+active,resident_information,,yesno,Active?,,,,,,,,y,,,,,
