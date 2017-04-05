@@ -1,0 +1,187 @@
+"Variable / Field Name","Form Name","Section Header","Field Type","Field Label","Choices, Calculations, OR Slider Labels","Field Note","Text Validation Type OR Show Slider Number","Text Validation Min","Text Validation Max",Identifier?,"Branching Logic (Show field only if...)","Required Field?","Custom Alignment","Question Number (surveys only)","Matrix Group Name","Matrix Ranking?","Field Annotation"
+record_id,resident_info,,text,"Record ID",,,,,,,,,,,,,
+institution,resident_info,,dropdown,Institution,"kumc, University of Kansas Medical Center | amc, Albany Medical Center | slu, Southern Illinois University | evms, Eastern Virginia Medical School | wu, Washington University | uwm, University of Wisconsin, Madison",,autocomplete,,,y,,y,,,,,@READONLY-SURVEY
+resident_kumc,resident_info,,sql,"Your name","select fn.record, concat(first_name,"" "",last_name) from   (select record, value as first_name from redcap.redcap_data where field_name='first_name' and project_id = 181) fn join  (select record, value as last_name from redcap.redcap_data where field_name='last_name' and project_id = 181) ln on ln.record=fn.record join  (select record, value as email from redcap.redcap_data where field_name='email' and project_id = 181) e on e.record=fn.record join  (select record, value as active from redcap.redcap_data where field_name=""active"" and project_id = 181 and value='1') a on a.record=fn.record join  (select record, value as res_institution from redcap.redcap_data where field_name=""res_institution"" and project_id = 181 and value='kumc') i on i.record=fn.record",,autocomplete,,,y,"[institution] = 'kumc'",y,,,,,
+resident_amc,resident_info,,sql,"Your name","select fn.record, concat(first_name,"" "",last_name) from   (select record, value as first_name from redcap.redcap_data where field_name='first_name' and project_id = 181) fn join  (select record, value as last_name from redcap.redcap_data where field_name='last_name' and project_id = 181) ln on ln.record=fn.record join  (select record, value as email from redcap.redcap_data where field_name='email' and project_id = 181) e on e.record=fn.record join  (select record, value as active from redcap.redcap_data where field_name=""active"" and project_id = 181 and value='1') a on a.record=fn.record join  (select record, value as res_institution from redcap.redcap_data where field_name=""res_institution"" and project_id = 181 and value='amc') i on i.record=fn.record",,autocomplete,,,y,"[institution] = 'amc'",y,,,,,
+resident_slu,resident_info,,sql,"Your name","select fn.record, concat(first_name,"" "",last_name) from   (select record, value as first_name from redcap.redcap_data where field_name='first_name' and project_id = 181) fn join  (select record, value as last_name from redcap.redcap_data where field_name='last_name' and project_id = 181) ln on ln.record=fn.record join  (select record, value as email from redcap.redcap_data where field_name='email' and project_id = 181) e on e.record=fn.record join  (select record, value as active from redcap.redcap_data where field_name=""active"" and project_id = 181 and value='1') a on a.record=fn.record join  (select record, value as res_institution from redcap.redcap_data where field_name=""res_institution"" and project_id = 181 and value='slu') i on i.record=fn.record",,autocomplete,,,y,"[institution] = 'slu'",y,,,,,
+resident_evms,resident_info,,sql,"Your name","select fn.record, concat(first_name,"" "",last_name) from   (select record, value as first_name from redcap.redcap_data where field_name='first_name' and project_id = 181) fn join  (select record, value as last_name from redcap.redcap_data where field_name='last_name' and project_id = 181) ln on ln.record=fn.record join  (select record, value as email from redcap.redcap_data where field_name='email' and project_id = 181) e on e.record=fn.record join  (select record, value as active from redcap.redcap_data where field_name=""active"" and project_id = 181 and value='1') a on a.record=fn.record join  (select record, value as res_institution from redcap.redcap_data where field_name=""res_institution"" and project_id = 181 and value='evms') i on i.record=fn.record",,autocomplete,,,y,"[institution] = 'evms'",y,,,,,
+resident_wu,resident_info,,sql,"Your name","select fn.record, concat(first_name,"" "",last_name) from   (select record, value as first_name from redcap.redcap_data where field_name='first_name' and project_id = 181) fn join  (select record, value as last_name from redcap.redcap_data where field_name='last_name' and project_id = 181) ln on ln.record=fn.record join  (select record, value as email from redcap.redcap_data where field_name='email' and project_id = 181) e on e.record=fn.record join  (select record, value as active from redcap.redcap_data where field_name=""active"" and project_id = 181 and value='1') a on a.record=fn.record join  (select record, value as res_institution from redcap.redcap_data where field_name=""res_institution"" and project_id = 181 and value='wu') i on i.record=fn.record",,autocomplete,,,y,"[institution] = 'wu'",y,,,,,
+resident_uwm,resident_info,,sql,"Your name","select fn.record, concat(first_name,"" "",last_name) from   (select record, value as first_name from redcap.redcap_data where field_name='first_name' and project_id = 181) fn join  (select record, value as last_name from redcap.redcap_data where field_name='last_name' and project_id = 181) ln on ln.record=fn.record join  (select record, value as email from redcap.redcap_data where field_name='email' and project_id = 181) e on e.record=fn.record join  (select record, value as active from redcap.redcap_data where field_name=""active"" and project_id = 181 and value='1') a on a.record=fn.record join  (select record, value as res_institution from redcap.redcap_data where field_name=""res_institution"" and project_id = 181 and value='uwm') i on i.record=fn.record",,autocomplete,,,y,"[institution] = 'uwm'",y,,,,,
+date_of_surgery,resident_info,,text,"Date of Surgery:",,,date_mdy,,,,,y,,,,,
+training_year,resident_info,,radio,"Subject Training Year","1, Intern | 2, Uro-1 | 3, Uro-2 | 4, Uro-3 | 5, Uro-4",,,,,y,,y,,,,,
+evaluator_kumc,resident_info,,sql,"Evaluator Name:","select fn.record, concat(first_name,"" "",last_name) from   (select record, value as first_name from redcap.redcap_data where field_name='first_name' and project_id = 182) fn join  (select record, value as last_name from redcap.redcap_data where field_name='last_name' and project_id = 182) ln on ln.record=fn.record join  (select record, value as email from redcap.redcap_data where field_name='email' and project_id = 182) e on e.record=fn.record join  (select record, value as active from redcap.redcap_data where field_name=""active"" and project_id = 182 and value='1') a on a.record=fn.record join  (select record, value as eval_institution from redcap.redcap_data where field_name=""eval_institution"" and project_id = 182 and value='kumc') i on i.record=fn.record",,autocomplete,,,y,"[institution] = 'kumc'",y,,,,,
+evaluator_amc,resident_info,,sql,"Evaluator Name:","select fn.record, concat(first_name,"" "",last_name) from   (select record, value as first_name from redcap.redcap_data where field_name='first_name' and project_id = 182) fn join  (select record, value as last_name from redcap.redcap_data where field_name='last_name' and project_id = 182) ln on ln.record=fn.record join  (select record, value as email from redcap.redcap_data where field_name='email' and project_id = 182) e on e.record=fn.record join  (select record, value as active from redcap.redcap_data where field_name=""active"" and project_id = 182 and value='1') a on a.record=fn.record join  (select record, value as eval_institution from redcap.redcap_data where field_name=""eval_institution"" and project_id = 182 and value='amc') i on i.record=fn.record",,autocomplete,,,y,"[institution] = 'amc'",y,,,,,
+evaluator_slu,resident_info,,sql,"Evaluator Name:","select fn.record, concat(first_name,"" "",last_name) from   (select record, value as first_name from redcap.redcap_data where field_name='first_name' and project_id = 182) fn join  (select record, value as last_name from redcap.redcap_data where field_name='last_name' and project_id = 182) ln on ln.record=fn.record join  (select record, value as email from redcap.redcap_data where field_name='email' and project_id = 182) e on e.record=fn.record join  (select record, value as active from redcap.redcap_data where field_name=""active"" and project_id = 182 and value='1') a on a.record=fn.record join  (select record, value as eval_institution from redcap.redcap_data where field_name=""eval_institution"" and project_id = 182 and value='slu') i on i.record=fn.record",,autocomplete,,,y,"[institution] = 'slu'",y,,,,,
+evaluator_evms,resident_info,,sql,"Evaluator Name:","select fn.record, concat(first_name,"" "",last_name) from   (select record, value as first_name from redcap.redcap_data where field_name='first_name' and project_id = 182) fn join  (select record, value as last_name from redcap.redcap_data where field_name='last_name' and project_id = 182) ln on ln.record=fn.record join  (select record, value as email from redcap.redcap_data where field_name='email' and project_id = 182) e on e.record=fn.record join  (select record, value as active from redcap.redcap_data where field_name=""active"" and project_id = 182 and value='1') a on a.record=fn.record join  (select record, value as eval_institution from redcap.redcap_data where field_name=""eval_institution"" and project_id = 182 and value='evms') i on i.record=fn.record",,autocomplete,,,y,"[institution] = 'evms'",y,,,,,
+evaluator_wu,resident_info,,sql,"Evaluator Name:","select fn.record, concat(first_name,"" "",last_name) from   (select record, value as first_name from redcap.redcap_data where field_name='first_name' and project_id = 182) fn join  (select record, value as last_name from redcap.redcap_data where field_name='last_name' and project_id = 182) ln on ln.record=fn.record join  (select record, value as email from redcap.redcap_data where field_name='email' and project_id = 182) e on e.record=fn.record join  (select record, value as active from redcap.redcap_data where field_name=""active"" and project_id = 182 and value='1') a on a.record=fn.record join  (select record, value as eval_institution from redcap.redcap_data where field_name=""eval_institution"" and project_id = 182 and value='wu') i on i.record=fn.record",,autocomplete,,,y,"[institution] = 'wu'",y,,,,,
+evaluator_uwm,resident_info,,sql,"Evaluator Name:","select fn.record, concat(first_name,"" "",last_name) from   (select record, value as first_name from redcap.redcap_data where field_name='first_name' and project_id = 182) fn join  (select record, value as last_name from redcap.redcap_data where field_name='last_name' and project_id = 182) ln on ln.record=fn.record join  (select record, value as email from redcap.redcap_data where field_name='email' and project_id = 182) e on e.record=fn.record join  (select record, value as active from redcap.redcap_data where field_name=""active"" and project_id = 182 and value='1') a on a.record=fn.record join  (select record, value as eval_institution from redcap.redcap_data where field_name=""eval_institution"" and project_id = 182 and value='uwm') i on i.record=fn.record",,autocomplete,,,y,"[institution] = 'uwm'",y,,,,,
+rotation_kumc,resident_info,,radio,Rotation:,"1, Main | 2, VA | 3, Children's Mercy | 4, Truman | 5, Cameron",,,,,,"[institution] = 'kumc'",y,,,,,
+rotation_amc,resident_info,,radio,Rotation:,"1, Main_amc | 2, VA_amc | 3, Children's Mercy_amc | 4, Truman_amc | 5, Cameron_amc",,,,,,"[institution] = 'amc'",y,,,,,
+rotation_slu,resident_info,,radio,Rotation:,"1, Main_slu | 2, VA_slu | 3, Children's Mercy_slu | 4, Truman_slu | 5, Cameron_slu",,,,,,"[institution] = 'slu'",y,,,,,
+rotation_evms,resident_info,,radio,Rotation:,"1, Main_evms | 2, VA_evms | 3, Children's Mercy_evms | 4, Truman_evms | 5, Cameron_evms",,,,,,"[institution] = 'evms'",y,,,,,
+rotation_wu,resident_info,,radio,Rotation:,"1, Main_wu | 2, VA_wu | 3, Children's Mercy_wu | 4, Truman_wu | 5, Cameron_wu",,,,,,"[institution] = 'wu'",y,,,,,
+rotation_uwm,resident_info,,radio,Rotation:,"1, Main_uwm | 2, VA_uwm | 3, Children's Mercy_uwm | 4, Truman_uwm | 5, Cameron_uwm",,,,,,"[institution] = 'uwm'",y,,,,,
+surgery,resident_info,,dropdown,"Surgical Procedure:","Chordee, Chordee correction | Circ, Circumcision | Continent_recon, Continent reconstruction (Mitrofanoff, MACE, Augment, etc) | Cystectomy, Cystectomy, radical | Cystoscopy, Cystoscopy | RGP, Cystoscopy, retrograde pyelogram | ESWL, ESWL | Sling, Female Sling (TVT, TOT, etc) | Hypo, Hypospadias repair | Ing_hernia_hydrocele, Inguinal hernia/hydrocele repair | Interstim, Insertion/Removal Interstim Device | Nx_Open_Partial, Nephrectomy Partial, open | Nx_RAL_parial, Nephrectomy Partial, robotic | Nx_Open_Radical, Nephrectomy Radical, open | Nx_Lap_RAL_Radical, Nephrectomy Radical, Lap/robotic | Nephro_U, Nephroureterectomy | Orchiectomy, Orchiectomy | Pexy_Torsion, Orchiopexy, for torsion | Pexy_UDT, Orchiopexy, for undescended testicle | PCNL, PCNL | IPP, Penile prosthesis placement | PVP, PVP | PNBx, Prostate Biopsy | Prostatectomy_RAL, Prostatectomy, robotic | Prostatectomy_Lap, Prostatectomy, Lap | Prostatectomy_open, Prostatectomy, open | Pyeloplasty_RAL, Pyeloplasty, robotic | Robot_Assist, Robotic, bedside assist | TURBT, TURBT | TURP, TURP | URS, Ureteroscopy | Reimplant, Ureteral reimplantation | Urethroplasty, Urethroplasty/stricture repair | Other, Other",,autocomplete,,,,,y,,,,,
+second_surgery,resident_info,,dropdown,"2nd Surgical Procedure:","_, _ | Chordee, Chordee correction | Circ, Circumcision | Continent_recon, Continent reconstruction (Mitrofanoff, MACE, Augment, etc) | Cystectomy, Cystectomy, radical | Cystoscopy, Cystoscopy | RGP, Cystoscopy, retrograde pyelogram | ESWL, ESWL | Sling, Female Sling (TVT, TOT, etc) | Hypo, Hypospadias repair | Ing_hernia_hydrocele, Inguinal hernia/hydrocele repair | Interstim, Insertion/Removal Interstim Device | Nx_Open_Partial, Nephrectomy Partial, open | Nx_RAL_parial, Nephrectomy Partial, robotic | Nx_Open_Radical, Nephrectomy Radical, open | Nx_Lap_RAL_Radical, Nephrectomy Radical, Lap/robotic | Nephro_U, Nephroureterectomy | Orchiectomy, Orchiectomy | Pexy_Torsion, Orchiopexy, for torsion | Pexy_UDT, Orchiopexy, for undescended testicle | PCNL, PCNL | IPP, Penile prosthesis placement | PVP, PVP | PNBx, Prostate Biopsy | Prostatectomy_RAL, Prostatectomy, robotic | Prostatectomy_Lap, Prostatectomy, Lap | Prostatectomy_open, Prostatectomy, open | Pyeloplasty_RAL, Pyeloplasty, robotic | Robot_Assist, Robotic, bedside assist | TURBT, TURBT | TURP, TURP | URS, Ureteroscopy | Reimplant, Ureteral reimplantation | Urethroplasty, Urethroplasty/stricture repair | Other, Other","If >2 procedures, select ""other"" and list separately below",autocomplete,,,,,y,,,,,
+other_surgery_type,resident_info,,notes,"Other surgery type:",,,,,,,"[surgery] = 'Other' or [second_surgery] = 'Other'",,,,,,
+reseval_link,invite_information,,text,"Link to evaluation of resident",,,,,,,,,,,,,
+faculty_email,invite_information,,text,"faculty email",,,email,,,,,,,,,,
+faceval_link,invite_information,,text,"Link to evaluation of faculty (Received by resident)",,,,,,,,,,,,,
+resident_email,invite_information,,text,"resident email",,,,,,,,,,,,,
+res_info_submit_date,invite_information,,text,"Resident info submitted date",,,,,,,,,,,,,
+email_sent_to_res,invite_information,,yesno,"Emails sent to resident",,,,,,,,,,,,,
+email_sent_to_fac,invite_information,,yesno,"Emails sent to faculty",,,,,,,,,,,,,
+res_info_submit_time,invite_information,,text,"Resident info submitted time",,,,,,,,,,,,,
+reminder_1_sent,invite_information,,radio,"Reminder 1 sent","0, No | 1, Yes",,,,,,,,,,,,
+reminder_2_sent,invite_information,,radio,"Reminder 2 sent","0, No | 1, Yes",,,,,,,,,,,,
+survey_info_kumc,resident_evaluation_by_faculty,"Resident Information",descriptive,"Resident: [resident_kumc]
+Training Year: [training_year]
+Rotation: [rotation]
+
+Faculty: [evaluator_kumc]
+
+Date of Surgery: [date_of_surgery]
+Surgery Details: [surgery], [second_surgery] 
+
+",,,,,,y,"[institution] = 'kumc'",,,,,,
+survey_info_amc,resident_evaluation_by_faculty,,descriptive,"Resident: [resident_amc]
+Training Year: [training_year]
+Rotation: [rotation]
+
+Faculty: [evaluator_amc]
+
+Date of Surgery: [date_of_surgery]
+Surgery Details: [surgery], [second_surgery] 
+",,,,,,y,"[institution] = 'amc'",,,,,,
+survey_info_slu,resident_evaluation_by_faculty,,descriptive,"Resident: [resident_slu]
+Training Year: [training_year]
+Rotation: [rotation]
+
+Faculty: [evaluator_slu]
+
+Date of Surgery: [date_of_surgery]
+Surgery Details: [surgery], [second_surgery] ",,,,,,y,"[institution] = 'slu'",,,,,,
+survey_info_evms,resident_evaluation_by_faculty,,descriptive,"Resident: [resident_evms]
+Training Year: [training_year]
+Rotation: [rotation]
+
+Faculty: [evaluator_evms]
+
+Date of Surgery: [date_of_surgery]
+Surgery Details: [surgery], [second_surgery] 
+",,,,,,y,"[institution] = 'evms'",,,,,,
+survey_info_wu,resident_evaluation_by_faculty,,descriptive,"Resident: [resident_wu]
+Training Year: [training_year]
+Rotation: [rotation]
+
+Faculty: [evaluator_wu]
+
+Date of Surgery: [date_of_surgery]
+Surgery Details: [surgery], [second_surgery] ",,,,,,y,"[institution] = 'wu'",,,,,,
+survey_info_uwm,resident_evaluation_by_faculty,,descriptive,"Resident: [resident_uwm]
+Training Year: [training_year]
+Rotation: [rotation]
+
+Faculty: [evaluator_uwm]
+
+Date of Surgery: [date_of_surgery]
+Surgery Details: [surgery], [second_surgery] 
+
+",,,,,,y,"[institution] = 'uwm'",,,,,,
+complexity,resident_evaluation_by_faculty,,radio,"Relative complexity of this particular procedure to average of same procedure:","1, Low | 2, Medium | 3, High",,,,,,,y,,,,,
+pre_procedure_plan,resident_evaluation_by_faculty,"Please use the scale below to evaluate each item in regards to this specific case with the following in mind:
+1) This scale is to be applied IRRESPECTIVE OF THE RESIDENT'S LEVEL OF TRAINING (i.e. a senior resident is expected to score better than a more junior resident)
+2) The purpose of this scale is to evaluate the trainee's ability to perform this procedure SAFELY and INDEPENDENTLY.  
+
+Scale:
+1 - ""I had to do"" - i.e., Requires complete hands on guidance, did not do, or was not given the opportunity to do 
+2 - ""I had to talk them through"" - i.e., Able to perform tasks but requires constant direction
+3 - ""I had to prompt them from time to time"" - i.e., Demonstrates some independence, but requires intermittent direction
+4 - ""I needed to be in the room just in case"" - i.e., Independence but unaware of risks and still requires supervision for safe practice
+5 - ""I did not need to be there"" - i.e., Complete independence, understands risks and performs safely, practice ready
+",radio,"Pre-procedure plan/preparation: Demonstrates appropriate knowledge pertaining to diagnosis and treatment options. Understands approach, required instruments, and probable complications. Patient correctly prepared and positioned.","1, 1 | 2, 2 | 3, 3 | 4, 4 | 5, 5",,,,,,,y,,,eval,,
+steps,resident_evaluation_by_faculty,,radio,"Knowledge of specific procedure steps: recalls, understands, and can describe/explain in detail steps of procedure, potential risks, and means to avoid/overcome them","1, 1 | 2, 2 | 3, 3 | 4, 4 | 5, 5",,,,,,,y,,,eval,,
+technical_performance,resident_evaluation_by_faculty,,radio,"Technical performance, efficiency and knowledge: obvious planned course of procedure with economy of movement, good progression, without pauses, respecting soft tissues, asks for correct instruments at appropriate time.","1, 1 | 2, 2 | 3, 3 | 4, 4 | 5, 5",,,,,,,y,,,eval,,
+visuospatial_skills_instru,resident_evaluation_by_faculty,,radio,"Visuospatial skills/instrument handling: 3D spatial orientation and able to position instruments/hardware where intended, makes fluid and deliberate moves with the instruments without any awkwardness or hesitation","1, 1 | 2, 2 | 3, 3 | 4, 4 | 5, 5",,,,,,,y,,,eval,,
+post_procedure_plan,resident_evaluation_by_faculty,,radio,"Post-procedure plan: appropriate and complete post procedure plan","1, 1 | 2, 2 | 3, 3 | 4, 4 | 5, 5",,,,,,,y,,,eval,,
+communication,resident_evaluation_by_faculty,,radio,"Professionalism: respectful and effective communication with other staff","1, 1 | 2, 2 | 3, 3 | 4, 4 | 5, 5",,,,,,,y,,,eval,,
+case_performed,resident_evaluation_by_faculty,Participation,radio,"% of Case performed by resident","1, < 25% | 2, 25-50% | 3, 50-75% | 4, > 75%",,,,,,,y,,,percentages,,
+critical_maneuvers,resident_evaluation_by_faculty,,radio,"% of Critical maneuvers performed by resident","1, < 25% | 2, 25-50% | 3, 50-75% | 4, > 75%",,,,,,,y,,,percentages,,
+resident_is_able_to_safely,resident_evaluation_by_faculty,,yesno,"Resident is able to safely perform this procedure independently",,,,,,,,y,,,,,
+done_well,resident_evaluation_by_faculty,Comments,notes,"Give at least 1 specific aspect of procedure done well",,,,,,,,y,,,,,
+needs_improvement,resident_evaluation_by_faculty,,notes,"Give at least 1 specific suggestion for improvement:",,,,,,,,y,,,,,
+real_time_eval,resident_evaluation_by_faculty,,yesno,"Was this evaluation discussed in person with the resident?",,,,,,,,,,,,,
+survey_info_res_kumc,faculty_evaluation_by_resident,"Faculty Information",descriptive,"Faculty: [evaluator_kumc]
+
+Resident: [resident_kumc]
+Training Year: [training_year]
+Rotation: [rotation]
+
+Date of Surgery: [date_of_surgery]
+Surgery Details: [surgery], [second_surgery] 
+",,,,,,y,"[institution] = 'kumc'",,,,,,
+survey_info_res_amc,faculty_evaluation_by_resident,,descriptive,"Faculty: [evaluator_amc]
+
+Resident: [resident_amc]
+Training Year: [training_year]
+Rotation: [rotation]
+
+Date of Surgery: [date_of_surgery]
+Surgery Details: [surgery], [second_surgery] 
+",,,,,,y,"[institution] = 'amc'",,,,,,
+survey_info_res_slu,faculty_evaluation_by_resident,,descriptive,"Faculty: [evaluator_slu]
+
+Resident: [resident_slu]
+Training Year: [training_year]
+Rotation: [rotation]
+
+Date of Surgery: [date_of_surgery]
+Surgery Details: [surgery], [second_surgery] 
+",,,,,,y,"[institution] = 'slu'",,,,,,
+survey_info_res_evms,faculty_evaluation_by_resident,,descriptive,"Faculty: [evaluator_evms]
+
+Resident: [resident_evms]
+Training Year: [training_year]
+Rotation: [rotation]
+
+Date of Surgery: [date_of_surgery]
+Surgery Details: [surgery], [second_surgery] 
+",,,,,,y,"[institution] = 'evms'",,,,,,
+survey_info_res_wu,faculty_evaluation_by_resident,,descriptive,"Faculty: [evaluator_wu]
+
+Resident: [resident_wu]
+Training Year: [training_year]
+Rotation: [rotation]
+
+Date of Surgery: [date_of_surgery]
+Surgery Details: [surgery], [second_surgery] 
+",,,,,,y,"[institution] = 'wu'",,,,,,
+survey_info_res_uwm,faculty_evaluation_by_resident,,descriptive,"Faculty: [evaluator_uwm]
+
+Resident: [resident_uwm]
+Training Year: [training_year]
+Rotation: [rotation]
+
+Date of Surgery: [date_of_surgery]
+Surgery Details: [surgery], [second_surgery] 
+",,,,,,y,"[institution] = 'uwm'",,,,,,
+instructions_res,faculty_evaluation_by_resident,"Educational Experience",descriptive,"Please evaluate your educational experience with your attending surgeon as it relates to this specific case on the following scale:
+
+1 - Strongly disagree
+2 - Disagree
+3 - Neutral
+4 - Agree
+5 - Strongly agree
+",,,,,,,,,,,,,
+learning_climate,faculty_evaluation_by_resident,,radio,"Learning Climate: The attending encouraged me to actively participate in discussions and to bring up problems, motivating me to study further.","1, 1 | 2, 2 | 3, 3 | 4, 4 | 5, 5",,,,,,,y,,,res,,
+professional_attitude,faculty_evaluation_by_resident,,radio,"Professional Attitude: The attending was easily approachable, was respectful, and listened attentively to me and to other staff.","1, 1 | 2, 2 | 3, 3 | 4, 4 | 5, 5",,,,,,,y,,,res,,
+communication_of_goals,faculty_evaluation_by_resident,,radio,"Communication of goals: The attending clearly stated the relevant learning goals and prioritized them as the surgery progressed.","1, 1 | 2, 2 | 3, 3 | 4, 4 | 5, 5",,,,,,,y,,,res,,
+feedback_positive,faculty_evaluation_by_resident,,radio,"Feedback - positive: The attending provided positive reinforcement of that which I did right.","1, 1 | 2, 2 | 3, 3 | 4, 4 | 5, 5",,,,,,,y,,,res,,
+feedback_constructive,faculty_evaluation_by_resident,,radio,"Feedback - constructive: The attending identified what I did wrong or should do better/differently, and provided suggestions for how to improve.  ","1, 1 | 2, 2 | 3, 3 | 4, 4 | 5, 5",,,,,,,y,,,res,,
+in_person_review,faculty_evaluation_by_resident,Discussion,yesno,"The attending discussed the resident surgical milestone evaluation with me in person",,,,,,,,y,,,,,
+briefing_done,faculty_evaluation_by_resident,,yesno,"The attending discussed with me the pre-procedure plan (""briefing"")	",,,,,,,,y,,,,,
+debriefing_done,faculty_evaluation_by_resident,,yesno,"The attending discussed with me the post-procedure plan (""debriefing"")",,,,,,,,y,,,,,
+case_performedres,faculty_evaluation_by_resident,Participation,radio,"% of case performed by you, the resident","1, < 25% | 2, 25-50% | 3, 50-75% | 4, > 75%",,,,,,,y,,,percentages_d4956c,,
+critical_maneuversres,faculty_evaluation_by_resident,,radio,"% of critical maneuvers performed by you, the resident","1, < 25% | 2, 25-50% | 3, 50-75% | 4, > 75%",,,,,,,y,,,percentages_d4956c,,
+teaching_suggestions,faculty_evaluation_by_resident,Comments,notes,"Provide any suggestions for improving teaching/educational environment here:",,,,,,,,,,,,,
+self_eval,faculty_evaluation_by_resident,,radio,"Please rate your overall performance of this surgical procedure with regards to your ability to complete this procedure safely and independently, irrespective of your training level.","0, 0 - ""No chance to participate"" - i.e. Attending did not give me any opportunity to demonstrate technical skill throughout the case | 1, 1 - ""Attending had to do the entire case"" - i.e. I required complete hands on guidance and could not do any portion of the case independently | 2, 2 - ""Attending had to talk me through"" - i.e. I was able to perform tasks but required constant direction | 3, 3 - ""Attending had to prompt me from time to time"" - i.e. I demonstrated some independence, but required intermittent direction | 4, 4 - ""Attending needed to be in the room just in case"" - i.e. I could perform the basics steps of the case but was not aware of all the risks and still required supervision for safe practice | 5, 5 - ""Attending did not need to be there"" - i.e. I demonstrated complete independence, understanding risks and am able to perform the procedure safely. Practice ready.""",,,,,,,y,,,,,
